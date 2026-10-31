@@ -1,0 +1,11 @@
+name: astrbot_plugin_deepseek_status
+display_name: DeepSeek 官方状态推送
+desc: 轮询 DeepSeek 官方状态页，向指定群推送事件变化及首次状态摘要。
+version: 1.0.0
+author: xueayi
+repo: https://github.com/xueayi/astrbot_plugin_deepseek_status
+astrbot_version: ">=4.5.7"
+tags:
+  - deepseek
+  - status
+  - push

@@ -1,0 +1,25 @@
+{
+  "target_session": {
+    "description": "推送目标会话",
+    "type": "string",
+    "default": "",
+    "hint": "格式：平台ID:GroupMessage:群号"
+  },
+  "poll_interval_seconds": {
+    "description": "轮询间隔（秒）",
+    "type": "int",
+    "default": 60,
+    "hint": "最小 60 秒；修改后重载插件生效。"
+  },
+  "proxy": {
+    "description": "HTTP 代理",
+    "type": "string",
+    "default": "",
+    "hint": "留空直连；如需代理，填写 AstrBot 容器可访问的代理地址。"
+  },
+  "enabled": {
+    "description": "启用自动状态推送",
+    "type": "bool",
+    "default": true
+  }
+}
