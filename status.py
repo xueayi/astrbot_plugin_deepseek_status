@@ -55,8 +55,15 @@ def snapshot(active: dict, history: dict) -> tuple[dict[str, str], list[dict]]:
     for item in events:
         updates = item.get("updates") or []
         latest = updates[-1] if updates else {}
+        components = sorted(
+            (c.get("component_id", ""), c.get("status", ""))
+            for c in item.get("affected_components", [])
+            if isinstance(c, dict)
+        )
         fingerprints[str(item["change_id"])] = (
-            f"{item.get('status', '')}:{latest.get('update_id', '')}"
+            f"{item.get('status', '')}:"
+            f"{(latest.get('description') or item.get('description') or '').strip()}:"
+            f"{components}"
         )
     return fingerprints, events
 

@@ -6,7 +6,7 @@ from status import PAGE_ID, format_changes, format_current, snapshot
 
 
 class StatusTests(unittest.TestCase):
-    def test_new_update_and_resolution_have_distinct_fingerprints(self):
+    def test_identical_updates_are_deduplicated_and_resolution_is_distinct(self):
         active = {
             "page": {"page_id": PAGE_ID, "components": []},
             "active_changes": [],
@@ -19,12 +19,20 @@ class StatusTests(unittest.TestCase):
             "updates": [{"update_id": "u1", "description": "排查中"}],
         }
         first, _ = snapshot(active, {"items": [event]})
-        self.assertEqual(first, {"1": "investigating:u1"})
+        duplicate = {
+            **event,
+            "updates": [
+                *event["updates"],
+                {"update_id": "u2", "description": "排查中"},
+            ],
+        }
+        duplicate_fingerprint, _ = snapshot(active, {"items": [duplicate]})
+        self.assertEqual(first, duplicate_fingerprint)
 
         event["status"] = "resolved"
-        event["updates"].append({"update_id": "u2", "description": "已恢复"})
+        event["updates"].append({"update_id": "u3", "description": "已恢复"})
         second, events = snapshot(active, {"items": [event]})
-        self.assertEqual(second, {"1": "resolved:u2"})
+        self.assertNotEqual(first, second)
         self.assertIn("已解决", format_changes(events))
         self.assertIn("已恢复", format_changes(events))
 
